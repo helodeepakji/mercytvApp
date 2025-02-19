@@ -19,6 +19,7 @@ class ScreenPlayer extends StatefulWidget {
 
 class ScreenPlayerState extends State<ScreenPlayer>
     with WidgetsBindingObserver {
+  Orientation? _previousOrientation;
   VideoPlayerController? _videoController;
   ChewieController? _chewieController;
   bool _isVideoInitialized = false;
@@ -33,6 +34,15 @@ class ScreenPlayerState extends State<ScreenPlayer>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _initializePlayer(widget.videoUrl, widget.isLiveStream);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_previousOrientation == null) {
+      _previousOrientation = MediaQuery.of(context).orientation;
+      print('Initial orientation: $_previousOrientation');
+    }
   }
 
   @override
@@ -181,6 +191,53 @@ class ScreenPlayerState extends State<ScreenPlayer>
   }
 
   @override
+  void didChangeMetrics() {
+    if (!mounted) return;
+    super.didChangeMetrics();
+
+    final currentOrientation = MediaQuery.of(context).orientation;
+    print('Metrics changed - Current orientation: $currentOrientation');
+    print('Previous orientation: $_previousOrientation');
+
+    if (_previousOrientation != currentOrientation) {
+      print(
+          'Orientation changed from $_previousOrientation to $currentOrientation');
+      _previousOrientation = currentOrientation;
+      _handleOrientationChange(currentOrientation);
+    } else {
+      print(
+          'Metrics changed but orientation remained same: $currentOrientation');
+    }
+  }
+
+  void _handleOrientationChange(Orientation orientation) {
+    if (_chewieController != null && mounted && !_isDisposed) {
+      print('Handling orientation change: $orientation');
+      print('Current fullscreen state: ${_chewieController!.isFullScreen}');
+
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (mounted && !_isDisposed) {
+          final shouldBeFullScreen = orientation == Orientation.landscape;
+          print('Should be fullscreen: $shouldBeFullScreen');
+
+          if (_chewieController!.isFullScreen != shouldBeFullScreen) {
+            print('Entering fullscreen mode');
+            _chewieController!.enterFullScreen();
+          } else if (!shouldBeFullScreen && _chewieController!.isFullScreen) {
+            print('Exiting fullscreen mode');
+            _chewieController!.exitFullScreen();
+          } else {
+            print('No fullscreen state change needed');
+          }
+        }
+      });
+    } else {
+      print(
+          'Cannot handle orientation change: controller=${_chewieController != null}, mounted=$mounted, disposed=${!_isDisposed}');
+    }
+  }
+
+  @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _isDisposed = true;
@@ -191,6 +248,13 @@ class ScreenPlayerState extends State<ScreenPlayer>
 
   @override
   Widget build(BuildContext context) {
+    print('media adityaa --------- ${MediaQuery.of(context).size.width}');
+    print(
+        'orientation adityaa --------- ${MediaQuery.of(context).orientation}');
+    if (MediaQuery.of(context).size.width < 520) {
+      print('Now portrait');
+      setState(() {});
+    }
     return Scaffold(
       body: Stack(
         children: [

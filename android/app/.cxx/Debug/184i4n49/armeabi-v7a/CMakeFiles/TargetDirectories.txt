@@ -1,0 +1,2 @@
+/Users/adityarana/StudioProjects/mercytvApp/android/app/.cxx/Debug/184i4n49/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/adityarana/StudioProjects/mercytvApp/android/app/.cxx/Debug/184i4n49/armeabi-v7a/CMakeFiles/rebuild_cache.dir

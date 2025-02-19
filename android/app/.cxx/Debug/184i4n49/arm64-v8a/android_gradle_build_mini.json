@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/Users/adityarana/Documents/DevPlayground/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/adityarana/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/adityarana/StudioProjects/mercytvApp/android/app/.cxx/Debug/184i4n49/arm64-v8a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/adityarana/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/adityarana/StudioProjects/mercytvApp/android/app/.cxx/Debug/184i4n49/arm64-v8a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}
